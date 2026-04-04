@@ -1,0 +1,643 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',var(--font-sans);direction:ltr}
+.layout{display:grid;grid-template-columns:1fr 420px;gap:0;max-width:1160px;margin:0 auto;padding:2rem 1rem}
+.left{padding-right:2rem;border-right:1px solid var(--color-border-tertiary)}
+.right{padding-left:2rem;position:sticky;top:0;align-self:start}
+.app-header{margin-bottom:1.75rem}
+.app-header h1{font-family:'Lora',serif;font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;font-style:italic}
+.app-header p{font-size:13px;color:var(--color-text-secondary)}
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.1em;color:#1D9E75;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#9FE1CB}
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.75rem}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--color-text-secondary);text-transform:uppercase}
+.field input,.field select{padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;transition:border-color .15s,background .15s;direction:ltr}
+.field input:focus,.field select:focus{border-color:#1D9E75;background:var(--color-background-primary)}
+.field input::placeholder{color:var(--color-text-tertiary)}
+.persons-list{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.person-card{background:var(--color-background-primary);border:1.5px solid var(--color-border-secondary);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.person-card:focus-within{border-color:#1D9E75}
+.pcard-head{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:#E1F5EE;border-bottom:1px solid #9FE1CB;flex-wrap:wrap;gap:8px}
+.person-num{font-size:12px;font-weight:500;color:#085041;display:flex;align-items:center;gap:7px}
+.num-badge{width:20px;height:20px;border-radius:50%;background:#1D9E75;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff}
+.pcard-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.fields-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.f-sm{flex:0 0 68px}
+.f-xs{flex:0 0 82px}
+.f-grow{flex:1;min-width:100px}
+.gender-toggle{display:flex;gap:5px;flex-wrap:wrap}
+.gbtn{padding:5px 10px;font-size:12px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:20px;background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-secondary);transition:all .15s;white-space:nowrap}
+.gbtn:hover{border-color:#5DCAA5;color:#0F6E56;background:#E1F5EE}
+.gbtn.on{background:#1D9E75;border-color:#1D9E75;color:#fff;font-weight:500}
+.bebe-tag{font-size:12px;background:#E1F5EE;color:#085041;padding:4px 10px;border-radius:20px;border:1px solid #9FE1CB}
+.checkbox-wrap{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--color-text-secondary);padding-bottom:9px}
+.checkbox-wrap input{width:15px;height:15px;cursor:pointer;accent-color:#1D9E75}
+.rm-btn{padding:4px 10px;font-size:11px;font-family:'DM Sans',var(--font-sans);border:1px solid var(--color-border-tertiary);border-radius:20px;background:transparent;cursor:pointer;color:var(--color-text-tertiary);transition:all .15s}
+.rm-btn:hover{border-color:#F09595;color:#A32D2D;background:#FCEBEB}
+.bottom-actions{display:flex;gap:10px;margin-bottom:2rem}
+.btn-add{flex:1;padding:10px;font-size:13px;font-family:'DM Sans',var(--font-sans);border:1.5px dashed var(--color-border-secondary);border-radius:8px;background:transparent;cursor:pointer;color:var(--color-text-secondary);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add:hover{border-color:#1D9E75;color:#0F6E56;background:#E1F5EE;border-style:solid}
+.preview-panel{background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.preview-header{padding:10px 14px;background:#E1F5EE;border-bottom:1px solid #9FE1CB;display:flex;justify-content:space-between;align-items:center}
+.preview-header span{font-size:11px;font-weight:500;letter-spacing:0.08em;color:#085041;text-transform:uppercase}
+.preview-img-wrap{padding:8px;background:var(--color-background-tertiary)}
+.preview-img-wrap img{width:100%;border-radius:6px;display:block}
+.action-btns{display:flex;gap:8px;flex-wrap:wrap}
+.abtn{flex:1;padding:9px 10px;font-size:12px;font-family:'DM Sans',var(--font-sans);border:none;border-radius:8px;background:#1D9E75;cursor:pointer;color:#fff;font-weight:500;transition:all .15s;min-width:80px;text-align:center}
+.abtn:hover{background:#0F6E56}
+.abtn:active{transform:scale(0.98)}
+.abtn-out{background:transparent;border:1.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+.abtn-out:hover{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+@media(max-width:760px){
+  .layout{grid-template-columns:1fr;padding:1rem 0.75rem}
+  .left{padding-right:0;border-right:none;border-bottom:1px solid var(--color-border-tertiary);padding-bottom:1.5rem;margin-bottom:1.5rem}
+  .right{padding-left:0;position:static}
+  .fields-row{flex-direction:column}
+  .f-sm,.f-xs,.f-grow{flex:1;min-width:0}
+  .meta-row{grid-template-columns:1fr}
+  .bottom-actions{flex-direction:column}
+  .gender-toggle{flex-wrap:wrap}
+  .pcard-head{gap:6px}
+  .action-btns{flex-wrap:wrap}
+  .abtn{min-width:calc(50% - 4px)}
+}
+</style>
+
+<div class="layout">
+  <div class="left">
+    <div class="app-header">
+      <h1>Annonce Janaza</h1>
+      <p>Tous les champs sont optionnels.</p>
+    </div>
+    <div class="section-label">Informations du jour</div>
+    <div class="meta-row">
+      <div class="field"><label>Date</label><input type="text" id="date-str" oninput="liveUpdate()"></div>
+      <div class="field"><label>Heure par défaut</label>
+        <select id="heure-select" onchange="syncAllHeures(this.value);liveUpdate()">
+          <option value="après Fajr">après Fajr</option>
+          <option value="après Dohr" selected>après Dohr</option>
+          <option value="après Asr">après Asr</option>
+          <option value="après Maghrib">après Maghrib</option>
+          <option value="après Isha">après Isha</option>
+          <option value="après Khotba">après Khotba</option>
+        </select>
+      </div>
+    </div>
+    <div class="section-label">Personnes</div>
+    <div class="persons-list" id="persons-container"></div>
+    <div class="bottom-actions">
+      <button class="btn-add" onclick="addPerson()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Ajouter une personne
+      </button>
+    </div>
+
+    <!-- ─── Panneau de gestion ─────────────────────── -->
+    <details id="manage-panel" style="margin-bottom:2rem">
+      <summary style="cursor:pointer;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:0.08em;color:#1D9E75;text-transform:uppercase;padding:8px 0;list-style:none;user-select:none" onclick="this.parentElement.open?document.getElementById('manage-chevron').style.transform='rotate(0deg)':document.getElementById('manage-chevron').style.transform='rotate(-90deg)'">
+        <svg id="manage-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" style="transition:transform .2s;transform:rotate(-90deg)"><path d="M3 4.5l3 3 3-3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Gérer mosquées &amp; cimetières
+        <span style="flex:1;height:1px;background:#9FE1CB;margin-left:4px"></span>
+      </summary>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:20px">
+
+        <!-- Mosquées custom -->
+        <div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">🕌 Ajouter une mosquée</div>
+          <div class="fields-row" style="flex-wrap:wrap;align-items:flex-end">
+            <div class="field f-grow"><label>Nom</label><input type="text" id="nm-name" placeholder="Nom mosquée"></div>
+            <div class="field f-grow"><label>Adresse</label><input type="text" id="nm-addr" placeholder="Rue, ville"></div>
+            <div class="field f-grow"><label>Ville</label><input type="text" id="nm-city" placeholder="Ville"></div>
+            <div class="field f-grow"><label>Transport</label><input type="text" id="nm-transport" placeholder="Bus / Tram / Métro"></div>
+            <button class="abtn" style="padding:9px 16px;flex:0 0 auto;margin-bottom:0" onclick="addCustomMosque()">Ajouter</button>
+          </div>
+          <div id="custom-mosques-list" style="margin-top:8px;display:flex;flex-direction:column;gap:4px"></div>
+        </div>
+
+        <!-- Cimetières custom -->
+        <div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">⚰️ Ajouter un cimetière</div>
+          <div class="fields-row" style="flex-wrap:wrap;align-items:flex-end">
+            <div class="field f-grow"><label>Nom affiché</label><input type="text" id="nc-label" placeholder="ex: Jette (parcelle nord)"></div>
+            <div class="field f-grow"><label>Nom complet</label><input type="text" id="nc-name" placeholder="cimetière communal de..."></div>
+            <div class="field f-grow"><label>Adresse</label><input type="text" id="nc-addr" placeholder="Rue, ville"></div>
+            <div class="field f-grow"><label>Transport</label><input type="text" id="nc-transport" placeholder="Bus / Tram"></div>
+            <button class="abtn" style="padding:9px 16px;flex:0 0 auto;margin-bottom:0" onclick="addCustomCemetery()">Ajouter</button>
+          </div>
+          <div id="custom-cemeteries-list" style="margin-top:8px;display:flex;flex-direction:column;gap:4px"></div>
+        </div>
+
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="preview-panel">
+      <div class="preview-header">
+        <span>Aperçu — <span id="nb-display">0</span> Janaza</span>
+      </div>
+      <div class="preview-img-wrap">
+        <img id="preview-img" alt="aperçu">
+      </div>
+    </div>
+    <div class="action-btns">
+      <button class="abtn" id="copy-img-btn" onclick="copyImage()">Copier image</button>
+      <button class="abtn" id="dl-btn" onclick="downloadImage()">Télécharger</button>
+      <button class="abtn abtn-out" id="copy-text-btn" onclick="copyText()">Copier texte</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// ▼ CONFIGURATION — MODIFIEZ ICI
+// ==========================================
+
+// MOSQUÉES : "Nom": { addr: "Adresse complète", transport: "Infos transport", city: "Ville" }
+const MOSQUES_BASE = {
+  // ── Molenbeek ──────────────────────────────────────────────────────────
+  "Khalil":        { addr: "11 rue Vanderstraeten, Molenbeek",        transport: "Tram 82: Triangle",                                                  city: "Molenbeek" },
+  "Arrahmane":     { addr: "42-44 rue George Moreau, Molenbeek",      transport: "Métro: Comte de Flandre ou Bus 89: G. Moreau",                       city: "Molenbeek" },
+  "Al Aziz":       { addr: "54 rue de l'Escaut, Molenbeek",           transport: "Métro: Comte de Flandre",                                            city: "Molenbeek" },
+  "Badr":          { addr: "108 rue de Ribaucourt, Molenbeek",        transport: "Métro: Ribaucourt",                                                  city: "Molenbeek" },
+  "Arafat":        { addr: "85-87 rue Ulens, Molenbeek",              transport: "Métro: Beekkant ou Tram 82: Ossegem",                                city: "Molenbeek" },
+  // ── Anderlecht ─────────────────────────────────────────────────────────
+  "Amal":          { addr: "11 rue du libre examen, Anderlecht",      transport: "Métro: Aumale",                                                      city: "Anderlecht" },
+  "Ar-Ridha":      { addr: "33 rue Dr De Meersman, Anderlecht",       transport: "Métro: Aumale ou Bus 46: Biestebroeck",                              city: "Anderlecht" },
+  // ── Schaerbeek ─────────────────────────────────────────────────────────
+  "Nour":          { addr: "18 rue Massaux, Schaerbeek",              transport: "Tram 92-93: Sainte Marie ou Bus 59: Geefs ou Bus 61: Limite",        city: "Schaerbeek" },
+  "Abu Hurayra":   { addr: "12A rue Waelhem, Schaerbeek",             transport: "Métro: Botanique ou Bus 65: Waelhem",                                city: "Schaerbeek" },
+  "Al Ansar":      { addr: "240 rue Verte, Schaerbeek",               transport: "Bus 64: Verte ou Tram 93: Pavillon",                                 city: "Schaerbeek" },
+  // ── Evere ──────────────────────────────────────────────────────────────
+  "Ettaouba":      { addr: "128 rue Edouard Stuckens, Evere",         transport: "Tram 55 ou Bus 45-64: Paix",                                         city: "Evere" },
+  // ── Laeken / NOH ───────────────────────────────────────────────────────
+  "Mouahidine":    { addr: "100 rue de Wautier, Laeken",              transport: "Métro: Bockstael",                                                   city: "Laeken" },
+  "Arrayane":      { addr: "98 rue des Prés Communs, NOH",            transport: "Bus 53: Prés Communs",                                               city: "Neder-Over-Heembeek" },
+  // ── Bruxelles-ville ────────────────────────────────────────────────────
+  "Grande Mosquée":{ addr: "Parc du Cinquantenaire 14, Bruxelles",    transport: "Métro: Mérode ou Schuman",                                           city: "Bruxelles" },
+  "Omar Ibn Al Khattab": { addr: "45 rue de Passchendaele, Bruxelles",transport: "Bus 86: Passchendaele",                                              city: "Bruxelles" },
+  // ── Ixelles / Forest ───────────────────────────────────────────────────
+  "Al Karam":      { addr: "52 ch. de Neerstalle, Forest",            transport: "Bus 50: Neerstalle",                                                 city: "Forest" },
+  "El Hikma":      { addr: "34 rue Berthelot, Forest",                transport: "Tram 97: Berthelot",                                                 city: "Forest" },
+  // ── Ganshoren / Koekelberg ─────────────────────────────────────────────
+  "An Nasr":       { addr: "294-296 ch. de Jette, Ganshoren",         transport: "Tram 93: Simonis ou Bus 87: Jette",                                  city: "Ganshoren" },
+  // ── Banlieue ───────────────────────────────────────────────────────────
+  "Nasr Vilvorde": { addr: "89 Mechelsesteenweg, Vilvorde",           transport: "Bus 47: Kerk Vilvoorde ou Bus 58: Heldenplein",                      city: "Vilvorde" },
+  "Al Youssef":    { addr: "78 Oude Haachtsesteenweg, Diegem",        transport: "Bus 12: Diegem",                                                     city: "Diegem" },
+};
+
+// CIMETIÈRES MUSULMANS (parcelles islamiques)
+const CEMETERIES_BASE = {
+  "Multiconfessionnel (Evere)": {
+    name: "cimetière multiconfessionnel",
+    addr: "4 rue d'Evere, Evere",
+    transport: "Bus 69-80: Jules Bordet"
+  },
+  "Vogelenzang (Anderlecht)": {
+    name: "cimetière communal du Vogelenzang",
+    addr: "Avenue du Soldat Britannique 1, Anderlecht",
+    transport: "Bus 46-74: Vogelenzang"
+  },
+  "Jette": {
+    name: "cimetière communal de Jette",
+    addr: "2 avenue Secretin, Jette",
+    transport: "Tram 93: Dieleghem ou Bus 53: Secretin"
+  },
+  "Laeken": {
+    name: "cimetière de Laeken",
+    addr: "2 avenue du Cimetière de Laeken, Laeken",
+    transport: "Bus 53: Cimetière Laeken"
+  },
+  "Etterbeek (Wezembeek)": {
+    name: "cimetière communal d'Etterbeek",
+    addr: "88 rue du Long Chêne, Wezembeek-Oppem",
+    transport: "Bus 36: Wezembeek"
+  },
+  "Forest": {
+    name: "cimetière de Forest",
+    addr: "51 Kleertstraat, Alsemberg",
+    transport: "Bus 54: Cimetière Forest"
+  },
+};
+
+// Versions dynamiques (permettent d'ajouter en live)
+let MOSQUES = {...MOSQUES_BASE};
+let CEMETERIES = {...CEMETERIES_BASE};
+
+// Compatibilité: CITIES vient des données mosquées
+function getCitiesMap(){
+  const m={};
+  Object.entries(MOSQUES).forEach(([k,v])=>{ if(v.city) m[k]=v.city; });
+  return m;
+}
+
+// Rétro-compatibilité CEMETERY (premier cimetière par défaut)
+function getDefaultCemetery(){
+  return Object.values(CEMETERIES)[0];
+}
+
+// LIENS WHATSAPP : ajoutés à la fin du message
+// Pour retirer les liens, videz le tableau : const WA_LINKS = [];
+const WA_LINKS = [
+  "Chaîne",
+  "https://whatsapp.com/channel/0029Vb6VzYvFMqrYrokCLM2G",
+  "Groupe :",
+  "https://chat.whatsapp.com/CW3dgrZLTiI6Xfh6qG8r5I?mode=gi_t"
+];
+
+// ==========================================
+// ▲ FIN DE LA CONFIGURATION
+// ==========================================
+
+const LRM="\u200E",RLM="\u200F";
+const DAYS=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function todayStr(){const d=new Date();return`${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;}
+function getMosqueKeys(){return Object.keys(MOSQUES);}
+function getCemeteryKeys(){return Object.keys(CEMETERIES);}
+let persons=[],nextId=1;
+
+function addPerson(){
+  const id=nextId++;
+  const defaultHeure=document.getElementById("heure-select").value||"après Dohr";
+  persons.push({id,firstName:"",lastName:"",age:"",ageUnit:"ans",mosque:"",customMosque:"",customAddr:"",customTransport:"",cemetery:false,cemeteryKey:"",gender:"m",heure:defaultHeure,bebePrefix:"bébé"});
+  render();liveUpdate();
+}
+function removePerson(id){persons=persons.filter(p=>p.id!==id);render();liveUpdate();}
+function setProp(id,k,v){const p=persons.find(p=>p.id===id);if(p){p[k]=v;liveUpdate();}}
+function setGender(id,g){const p=persons.find(p=>p.id===id);if(p){p.gender=g;render();liveUpdate();}}
+function setUnit(id,v){const p=persons.find(p=>p.id===id);if(p){p.ageUnit=v;render();liveUpdate();}}
+function setCem(id,v){const p=persons.find(p=>p.id===id);if(p){p.cemetery=v;if(!v)p.cemeteryKey="";else if(!p.cemeteryKey)p.cemeteryKey=getCemeteryKeys()[0]||"";liveUpdate();render();}}
+function setCemKey(id,v){const p=persons.find(p=>p.id===id);if(p){p.cemeteryKey=v;liveUpdate();}}
+function setMosque(id,v){const p=persons.find(p=>p.id===id);if(p){p.mosque=v;render();liveUpdate();}}
+function syncAllHeures(v){persons.forEach(p=>p.heure=v);render();}
+
+function isBebe(p){return p.ageUnit==='mois'||p.ageUnit==='jours';}
+
+function render(){
+  const c=document.getElementById("persons-container");c.innerHTML="";
+  persons.forEach((p,idx)=>{
+    const div=document.createElement("div");div.className="person-card";
+    const mOpts=["", ...getMosqueKeys(), "Autre"].map(m=>`<option value="${m}" ${p.mosque===m?"selected":""}>${m||"— Mosquée —"}</option>`).join("");
+    const uOpts=["ans","mois","jours"].map(u=>`<option value="${u}" ${p.ageUnit===u?"selected":""}>${u}</option>`).join("");
+    const bb=isBebe(p);
+    const heureOpts=["après Fajr","après Dohr","après Asr","après Maghrib","après Isha","après Khotba"].map(h=>`<option value="${h||""}" ${p.heure===h?"selected":""}>${h}</option>`).join("");
+    const bebePrefixOpts=[["bébé","🍼 bébé :"],["nouveau-né","👶 nouveau-né :"],["(aucun)","sans préfixe"]].map(([v,l])=>`<option value="${v}" ${p.bebePrefix===v?"selected":""}>${l}</option>`).join("");
+    div.innerHTML=`
+      <div class="pcard-head">
+        <span class="person-num"><span class="num-badge">${idx+1}</span> Personne ${idx+1}${bb?` <span class="bebe-tag" style="font-size:11px">🍼 Bébé</span>`:""}</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <div class="gender-toggle">
+            <button class="gbtn ${p.gender==='m'?"on":""}" onclick="setGender(${p.id},'m')" style="direction:rtl">رحمه الله</button>
+            <button class="gbtn ${p.gender==='f'?"on":""}" onclick="setGender(${p.id},'f')" style="direction:rtl">رحمها الله</button>
+            <button class="gbtn ${p.gender==='none'?"on":""}" onclick="setGender(${p.id},'none')">Sans</button>
+          </div>
+          ${persons.length>1?`<button class="rm-btn" onclick="removePerson(${p.id})">Supprimer</button>`:""}
+        </div>
+      </div>
+      <div class="pcard-body">
+        <div class="fields-row">
+          <div class="field f-grow"><label>Prénom</label><input type="text" placeholder="Prénom" value="${p.firstName}" oninput="setProp(${p.id},'firstName',this.value)"></div>
+          <div class="field f-grow"><label>Nom</label><input type="text" placeholder="Nom" value="${p.lastName}" oninput="setProp(${p.id},'lastName',this.value)"></div>
+          <div class="field f-sm"><label>Âge</label><input type="text" placeholder="—" value="${p.age}" oninput="setProp(${p.id},'age',this.value)"></div>
+          <div class="field f-xs"><label>Unité</label><select onchange="setUnit(${p.id},this.value)">${uOpts}</select></div>
+          ${bb?`<div class="field f-xs"><label>Préfixe</label><select onchange="setProp(${p.id},'bebePrefix',this.value)">${bebePrefixOpts}</select></div>`:""}
+        </div>
+        <div class="fields-row">
+          <div class="field f-grow"><label>Mosquée</label><select onchange="setMosque(${p.id},this.value)">${mOpts}</select></div>
+          ${p.mosque==="Autre"?`
+            <div class="field f-grow"><label>Nom</label><input type="text" placeholder="Nom mosquée" value="${p.customMosque}" oninput="setProp(${p.id},'customMosque',this.value)"></div>
+            <div class="field f-grow"><label>Adresse</label><input type="text" placeholder="Rue, ville" value="${p.customAddr}" oninput="setProp(${p.id},'customAddr',this.value)"></div>
+            <div class="field f-grow"><label>Transport</label><input type="text" placeholder="Bus / Tram" value="${p.customTransport}" oninput="setProp(${p.id},'customTransport',this.value)"></div>`:""}
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:2px">
+            <label class="checkbox-wrap" style="padding-bottom:0"><input type="checkbox" ${p.cemetery?"checked":""} onchange="setCem(${p.id},this.checked)"> + cimetière</label>
+            ${p.cemetery?`<select class="field" style="padding:6px 10px;font-size:13px;flex:1;min-width:160px;border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary)" onchange="setCemKey(${p.id},this.value)">${getCemeteryKeys().map(k=>`<option value="${k}" ${p.cemeteryKey===k?"selected":""}>${k}</option>`).join("")}</select>`:""}
+          </div>
+        </div>
+        <div class="fields-row">
+          <div class="field f-grow"><label>Heure de la Janaza</label><select onchange="setProp(${p.id},'heure',this.value)">${heureOpts}</select></div>
+        </div>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+
+function getMN(p){return p.mosque==="Autre"?(p.customMosque||""):(p.mosque||"");}
+function getMC(p){return p.mosque&&p.mosque!=="Autre"?(MOSQUES[p.mosque]?.city||""):"";}
+function getCemObj(p){return p.cemeteryKey&&CEMETERIES[p.cemeteryKey]?CEMETERIES[p.cemeteryKey]:null;}function getName(p){return[p.firstName,p.lastName].filter(Boolean).join(" ");}
+function getAgeStr(p){return p.age?`${p.age} ${p.ageUnit}`:"";}
+function fallback(p){
+  if(isBebe(p)){
+    const pref=getBebePrefix(p);
+    if(!pref||pref==="(aucun)")return"un bébé";
+    // Article indéfini devant le préfixe seul
+    return`un ${pref}`;
+  }
+  return p.gender==='f'?"une sœur":"un frère";
+}
+
+// Single-person descriptor: "Mohamed, 86 ans" or "bébé Zaïm, 2 jours" or "un nouveau-né, 3 jours"
+function dSingle(p){
+  const n=getName(p),a=getAgeStr(p);
+  if(isBebe(p)){
+    const pref=getBebePrefix(p);
+    // Avec nom : "bébé Zaïm" / "nouveau-né Zaïm" / "Zaïm" (sans préfixe)
+    // Sans nom : "un bébé" / "un nouveau-né"
+    const label=n?(pref?`${pref} ${n}`:n):fallback(p);
+    return a?`${label}, ${a}`:label;
+  }
+  const full=n||fallback(p);return a?`${full}, ${a}`:full;
+}
+
+// Multi-person descriptor: "Mohamed (86 ans)" or "bébé Zaïm (2 jours)" or "un nouveau-né (3 jours)"
+function dMulti(p){
+  const n=getName(p),a=getAgeStr(p);
+  if(isBebe(p)){
+    const pref=getBebePrefix(p);
+    const label=n?(pref?`${pref} ${n}`:n):fallback(p);
+    return a?`${label} (${a})`:label;
+  }
+  const l=n||fallback(p);return a?`${l} (${a})`:l;
+}
+
+function getRahma(ps){
+  const ns=ps.filter(p=>p.gender!=='none');
+  if(!ns.length)return"";
+  if(ns.length===1)return ns[0].gender==='f'?"رحمها الله":"رحمه الله";
+  if(ns.length===2)return"رحمهما الله";
+  return ns.every(p=>p.gender==='f')?"رحمهن الله":"رحمهم الله";
+}
+
+function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
+  const mP=mName?`, à ${mName}`:"",cP=mCity?`, ${mCity}`:"";
+  const allCem=ps.every(p=>p.cemetery),someCem=ps.some(p=>p.cemetery)&&!allCem;
+  const cemStr=allCem?" + cimetière":"";
+  const heureStr=showHeure?`, ${groupHeure} إن شاء الله`:"";
+
+  if(ps.length===1){
+    const p=ps[0],desc=dSingle(p);
+    const rahma=p.gender!=='none'?(p.gender==='f'?"رحمها الله":"رحمه الله"):"";
+    const rS=rahma?`, ${rahma}`:"";
+    return[`${LRM}${num}) ${desc}${rS}${mP}${cP}${heureStr}${cemStr}.`];
+  }
+
+  const rahma=getRahma(ps),rS=rahma?`, ${rahma}`:"";
+  const allNamed=ps.every(p=>getName(p)),noneNamed=!ps.some(p=>getName(p));
+  let nameStr;
+  if(allNamed){
+    const ds=ps.map(dMulti);
+    nameStr=ds.length===2?`${ds[0]} et ${ds[1]}`:ds.slice(0,-1).join(", ")+" et "+ds[ds.length-1];
+  } else if(noneNamed){
+    const nb=ps.length,nbB=ps.filter(isBebe).length,nbN=nb-nbB;
+    nameStr=nbN===0?`${nbB} bébé${nbB>1?"s":""}`:`${nb} membres de la oumma`;
+  } else {
+    nameStr=`${ps.length} membres de la oumma dont ${ps.filter(p=>getName(p)).map(dMulti).join(" et ")}`;
+  }
+
+  const main=`${LRM}${num}) ${nameStr}${rS}${mP}${cP}${heureStr}${cemStr}.`;
+  const extras=[];
+  if(someCem){
+    const ns=ps.filter(p=>p.cemetery).map(p=>getName(p)||fallback(p));
+    extras.push(`${LRM}+ cimetière pour ${ns.join(" et ")}.`);
+  }
+  return[main,...extras];
+}
+
+function groupPersons(){
+  const groups=[],seen=new Set();
+  persons.forEach(p=>{
+    if(seen.has(p.id))return;
+    const key=getMN(p);
+    if(key){
+      const g=persons.filter(q=>!seen.has(q.id)&&getMN(q)===key&&(q.heure||"après Dohr")===(p.heure||"après Dohr"));
+      g.forEach(q=>seen.add(q.id));groups.push(g);
+    } else{seen.add(p.id);groups.push([p]);}
+  });
+  return groups;
+}
+
+function buildMessage(){
+  const globalHeure=document.getElementById("heure-select").value||"après Dohr";
+  const dateStr=document.getElementById("date-str").value||todayStr();
+  const groups=groupPersons();
+  const nb=groups.length;
+
+  // Determine if all groups share the same heure
+  const allHeures=groups.map(ps=>ps[0].heure||globalHeure);
+  const allSameHeure=allHeures.every(h=>h===allHeures[0]);
+  const introHeure=allSameHeure?allHeures[0]:null;
+
+  const lines=[];
+  lines.push(`${LRM}Salam alaykum wa rahmatullahi wa barakatu,`);
+  lines.push(`${RLM}السلام عليكم  و رحمة الله و بركاته`);
+  lines.push(`${LRM}C'est à Allah que nous appartenons et c'est à Lui que nous retournons» (S2, V156)`);
+  lines.push(`${RLM}إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ`);
+  if(introHeure){
+    lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr}, ${introHeure} إن شاء الله:`);
+  } else {
+    lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr} إن شاء الله:`);
+  }
+  lines.push("");
+  const mosquesUsed=[];
+  groups.forEach((ps,idx)=>{
+    const mN=getMN(ps[0]),mC=getMC(ps[0]);
+    const groupHeure=ps[0].heure||globalHeure;
+    lines.push(...buildGroupLines(idx+1,ps,mN,mC,groupHeure,!allSameHeure));
+    if(mN&&!mosquesUsed.find(m=>m.key===mN))mosquesUsed.push({key:mN,person:ps[0]});
+  });
+  lines.push("");
+  lines.push(`${RLM}كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ`);
+  lines.push(`${LRM}Chaque âme goûtera la mort (S3, V185)`);
+  lines.push("");
+  mosquesUsed.forEach(({key,person:p})=>{
+    if(p.mosque==="Autre"){if(p.customMosque){lines.push(`${LRM}🕌 ${p.customMosque}, ${p.customAddr}.`);if(p.customTransport)lines.push(`${LRM}(${p.customTransport})`);}}
+    else if(MOSQUES[p.mosque]){const m=MOSQUES[p.mosque];lines.push(`${LRM}🕌 ${p.mosque}, ${m.addr}.`);lines.push(`${LRM}(${m.transport})`);}
+  });
+  // Cimetières utilisés (dédupliqués)
+  const cemUsed=[];
+  persons.filter(p=>p.cemetery).forEach(p=>{
+    const key=p.cemeteryKey||getCemeteryKeys()[0];
+    if(key&&!cemUsed.includes(key))cemUsed.push(key);
+  });
+  cemUsed.forEach(key=>{
+    const c=CEMETERIES[key];
+    if(c){lines.push(`${LRM}⚰️ ${c.name}, ${c.addr}.`);lines.push(`${LRM}(${c.transport})`);}
+  });  if(WA_LINKS.length){lines.push("");WA_LINKS.forEach(l=>lines.push(`${LRM}${l}`));}
+  return lines;
+}
+
+// ==========================================
+// RENDU IMAGE (Canvas)
+// Le canvas évite tous les problèmes RTL/LTR
+// car il dessine ligne par ligne avec direction explicite
+// ==========================================
+const CW=760,CP=24,CFS=15,CLH=27;
+
+function isPureAr(line){
+  const t=line.replace(/[\u200E\u200F]/g,"").trim();
+  return/[\u0600-\u06FF]/.test(t)&&!/[a-zA-ZÀ-ÿ\d🕌⚰]/.test(t)&&t.length>0;
+}
+function isLink(line){return line.replace(/[\u200E\u200F]/g,"").trim().startsWith("http");}
+
+function generateCanvas(){
+  const lines=buildMessage();
+  const font=`${CFS}px 'Segoe UI',Arial,Helvetica,sans-serif`;
+  const fontAr=`${CFS+1}px 'Segoe UI',Arial,Helvetica,sans-serif`;
+  const tmp=document.createElement('canvas').getContext('2d');
+  tmp.font=font;
+  const maxW=CW-CP*2;
+
+  function wrap(text,isAr){
+    if(!text)return[{t:"",ar:false}];
+    if(isAr||tmp.measureText(text).width<=maxW)return[{t:text,ar:isAr}];
+    const ws=text.split(" ");const res=[];let cur="";
+    ws.forEach(w=>{const test=cur?cur+" "+w:w;if(tmp.measureText(test).width<=maxW)cur=test;else{if(cur)res.push(cur);cur=w;}});
+    if(cur)res.push(cur);
+    return res.map(t=>({t,ar:false}));
+  }
+
+  const dLines=[];
+  lines.forEach(line=>{
+    const clean=line.replace(/[\u200E\u200F]/g,"");
+    if(!clean){dLines.push({t:"",empty:true});return;}
+    const ar=isPureAr(line),lk=isLink(line);
+    wrap(clean,ar).forEach(d=>dLines.push({...d,link:lk}));
+  });
+
+  const headerH=40,totalH=headerH+CP*2+dLines.length*CLH;
+  const canvas=document.createElement('canvas');
+  canvas.width=CW;canvas.height=Math.max(totalH,100);
+  const ctx=canvas.getContext('2d');
+
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,canvas.height);
+  ctx.fillStyle='#1D9E75';ctx.fillRect(0,0,CW,headerH);
+  ctx.fillStyle='#E1F5EE';ctx.font=`500 12px 'Segoe UI',Arial,sans-serif`;
+  ctx.direction='ltr';ctx.textAlign='left';ctx.fillText('Annonce Janaza',CP,25);
+  ctx.fillStyle='#9FE1CB';ctx.fillText(` — ${groupPersons().length} Janaza`,CP+130,25);
+
+  let y=headerH+CP+CFS;
+  dLines.forEach(({t,ar,empty,link})=>{
+    if(empty){y+=CLH*0.5;return;}
+    ctx.fillStyle=ar?'#555555':link?'#1D9E75':'#1a1a1a';
+    ctx.font=ar?fontAr:font;
+    ctx.direction=ar?'rtl':'ltr';
+    ctx.textAlign=ar?'right':'left';
+    ctx.fillText(t,ar?CW-CP:CP,y);
+    y+=CLH;
+  });
+
+  return canvas;
+}
+
+function liveUpdate(){
+  document.getElementById("nb-display").textContent=groupPersons().length;
+  document.getElementById("preview-img").src=generateCanvas().toDataURL('image/png');
+}
+
+function copyText(){
+  navigator.clipboard.writeText(buildMessage().join("\n")).then(()=>{
+    const b=document.getElementById("copy-text-btn");b.textContent="Copié !";
+    setTimeout(()=>b.textContent="Copier texte",2000);
+  });
+}
+
+function downloadImage(){
+  const a=document.createElement('a');
+  a.download=`janaza-${new Date().toISOString().slice(0,10)}.png`;
+  a.href=generateCanvas().toDataURL('image/png');a.click();
+}
+
+function copyImage(){
+  generateCanvas().toBlob(async blob=>{
+    try{
+      await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+      const b=document.getElementById("copy-img-btn");b.textContent="Image copiée !";
+      setTimeout(()=>b.textContent="Copier image",2000);
+    }catch(e){alert("Non supporté sur cet appareil — utilisez 'Télécharger' puis envoyez l'image.");}
+  });
+}
+
+// ── Gestion dynamique mosquées & cimetières ──────────────────────────────
+function renderCustomLists(){
+  // Mosquées ajoutées
+  const mc=document.getElementById("custom-mosques-list");
+  if(mc){
+    const custom=Object.keys(MOSQUES).filter(k=>!MOSQUES_BASE[k]);
+    mc.innerHTML=custom.length?custom.map(k=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:8px;font-size:12px;color:var(--color-text-primary)">
+        <span>🕌 <strong>${k}</strong> — ${MOSQUES[k].addr}</span>
+        <button class="rm-btn" onclick="removeCustomMosque('${k.replace(/'/g,"\\'")}')">Supprimer</button>
+      </div>`).join(""):"<div style='font-size:12px;color:var(--color-text-tertiary);padding:4px 2px'>Aucune mosquée ajoutée</div>";
+  }
+  // Cimetières ajoutés
+  const cc=document.getElementById("custom-cemeteries-list");
+  if(cc){
+    const custom=Object.keys(CEMETERIES).filter(k=>!CEMETERIES_BASE[k]);
+    cc.innerHTML=custom.length?custom.map(k=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:8px;font-size:12px;color:var(--color-text-primary)">
+        <span>⚰️ <strong>${k}</strong> — ${CEMETERIES[k].addr}</span>
+        <button class="rm-btn" onclick="removeCustomCemetery('${k.replace(/'/g,"\\'")}')">Supprimer</button>
+      </div>`).join(""):"<div style='font-size:12px;color:var(--color-text-tertiary);padding:4px 2px'>Aucun cimetière ajouté</div>";
+  }
+}
+
+function addCustomMosque(){
+  const name=document.getElementById("nm-name").value.trim();
+  const addr=document.getElementById("nm-addr").value.trim();
+  const city=document.getElementById("nm-city").value.trim();
+  const transport=document.getElementById("nm-transport").value.trim();
+  if(!name){alert("Le nom de la mosquée est requis.");return;}
+  if(MOSQUES[name]){alert(`"${name}" existe déjà.`);return;}
+  MOSQUES[name]={addr,city,transport};
+  document.getElementById("nm-name").value="";
+  document.getElementById("nm-addr").value="";
+  document.getElementById("nm-city").value="";
+  document.getElementById("nm-transport").value="";
+  renderCustomLists();
+  render();
+  liveUpdate();
+}
+
+function removeCustomMosque(key){
+  if(!confirm(`Supprimer la mosquée "${key}" ?`))return;
+  delete MOSQUES[key];
+  // Réinitialiser les personnes qui utilisaient cette mosquée
+  persons.forEach(p=>{if(p.mosque===key)p.mosque="";});
+  renderCustomLists();
+  render();
+  liveUpdate();
+}
+
+function addCustomCemetery(){
+  const label=document.getElementById("nc-label").value.trim();
+  const name=document.getElementById("nc-name").value.trim();
+  const addr=document.getElementById("nc-addr").value.trim();
+  const transport=document.getElementById("nc-transport").value.trim();
+  if(!label){alert("Le nom affiché est requis.");return;}
+  if(CEMETERIES[label]){alert(`"${label}" existe déjà.`);return;}
+  CEMETERIES[label]={name:name||label,addr,transport};
+  document.getElementById("nc-label").value="";
+  document.getElementById("nc-name").value="";
+  document.getElementById("nc-addr").value="";
+  document.getElementById("nc-transport").value="";
+  renderCustomLists();
+  render();
+  liveUpdate();
+}
+
+function removeCustomCemetery(key){
+  if(!confirm(`Supprimer le cimetière "${key}" ?`))return;
+  delete CEMETERIES[key];
+  persons.forEach(p=>{if(p.cemeteryKey===key){p.cemetery=false;p.cemeteryKey="";}});
+  renderCustomLists();
+  render();
+  liveUpdate();
+}
+
+document.getElementById("date-str").value=todayStr();
+addPerson();
+renderCustomLists();
+</script>
