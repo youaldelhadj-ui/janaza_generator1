@@ -77,13 +77,12 @@ body{font-family:'DM Sans',var(--font-sans);direction:ltr}
       <div class="field"><label>Date</label><input type="text" id="date-str" oninput="liveUpdate()"></div>
       <div class="field"><label>Heure par défaut</label>
         <select id="heure-select" onchange="syncAllHeures(this.value);liveUpdate()">
-          <option value="après Fajr">après Fajr</option>
           <option value="après Dohr" selected>après Dohr</option>
           <option value="après Asr">après Asr</option>
-          <option value="après Maghrib">après Maghrib</option>
-          <option value="après Isha">après Isha</option>
           <option value="après Khotba">après Khotba</option>
+          <option value="__autre__">✏️ Autre…</option>
         </select>
+        <input type="text" id="heure-custom-global" placeholder="Saisir l'heure…" style="display:none;margin-top:6px;padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;width:100%" oninput="onGlobalCustomHeure(this.value)">
       </div>
     </div>
     <div class="section-label">Personnes</div>
@@ -262,7 +261,9 @@ let persons=[],nextId=1;
 
 function addPerson(){
   const id=nextId++;
-  const defaultHeure=document.getElementById("heure-select").value||"après Dohr";
+  const rawHeure=document.getElementById("heure-select").value||"après Dohr";
+  const customVal=document.getElementById("heure-custom-global")?.value||"";
+  const defaultHeure=rawHeure==="__autre__"?(customVal||"après Dohr"):rawHeure;
   persons.push({id,firstName:"",lastName:"",age:"",ageUnit:"ans",mosque:"",customMosque:"",customAddr:"",customTransport:"",cemetery:false,cemeteryKey:"",gender:"m",heure:defaultHeure,bebePrefix:"bébé"});
   render();liveUpdate();
 }
@@ -273,7 +274,24 @@ function setUnit(id,v){const p=persons.find(p=>p.id===id);if(p){p.ageUnit=v;rend
 function setCem(id,v){const p=persons.find(p=>p.id===id);if(p){p.cemetery=v;if(!v)p.cemeteryKey="";else if(!p.cemeteryKey)p.cemeteryKey=getCemeteryKeys()[0]||"";liveUpdate();render();}}
 function setCemKey(id,v){const p=persons.find(p=>p.id===id);if(p){p.cemeteryKey=v;liveUpdate();}}
 function setMosque(id,v){const p=persons.find(p=>p.id===id);if(p){p.mosque=v;render();liveUpdate();}}
-function syncAllHeures(v){persons.forEach(p=>p.heure=v);render();}
+function setHeureSelect(id,v){
+  const p=persons.find(p=>p.id===id);
+  if(!p)return;
+  if(v==="__autre__"){p.heure="";render();liveUpdate();}
+  else{p.heure=v;render();liveUpdate();}
+}
+function syncAllHeures(v){
+  if(v==="__autre__"){
+    document.getElementById("heure-custom-global").style.display="block";
+    document.getElementById("heure-custom-global").focus();
+    return;
+  }
+  document.getElementById("heure-custom-global").style.display="none";
+  persons.forEach(p=>p.heure=v);render();liveUpdate();
+}
+function onGlobalCustomHeure(v){
+  persons.forEach(p=>p.heure=v||"");liveUpdate();
+}
 
 function isBebe(p){return p.ageUnit==='mois'||p.ageUnit==='jours';}
 
@@ -284,7 +302,9 @@ function render(){
     const mOpts=["", ...getMosqueKeys(), "Autre"].map(m=>`<option value="${m}" ${p.mosque===m?"selected":""}>${m||"— Mosquée —"}</option>`).join("");
     const uOpts=["ans","mois","jours"].map(u=>`<option value="${u}" ${p.ageUnit===u?"selected":""}>${u}</option>`).join("");
     const bb=isBebe(p);
-    const heureOpts=["après Fajr","après Dohr","après Asr","après Maghrib","après Isha","après Khotba"].map(h=>`<option value="${h||""}" ${p.heure===h?"selected":""}>${h}</option>`).join("");
+    const HEURES_BASE=["après Dohr","après Asr","après Khotba"];
+    const isCustomHeure=!HEURES_BASE.includes(p.heure);
+    const heureOpts=[...HEURES_BASE,"__autre__"].map(h=>`<option value="${h}" ${(h==="__autre__"&&isCustomHeure)||p.heure===h?"selected":""}>${h==="__autre__"?"✏️ Autre…":h}</option>`).join("");
     const bebePrefixOpts=[["bébé","🍼 bébé :"],["nouveau-né","👶 nouveau-né :"],["(aucun)","sans préfixe"]].map(([v,l])=>`<option value="${v}" ${p.bebePrefix===v?"selected":""}>${l}</option>`).join("");
     div.innerHTML=`
       <div class="pcard-head">
@@ -318,7 +338,11 @@ function render(){
           </div>
         </div>
         <div class="fields-row">
-          <div class="field f-grow"><label>Heure de la Janaza</label><select onchange="setProp(${p.id},'heure',this.value)">${heureOpts}</select></div>
+          <div class="field f-grow">
+            <label>Heure de la Janaza</label>
+            <select onchange="setHeureSelect(${p.id},this.value)">${heureOpts}</select>
+            ${isCustomHeure?`<input type="text" placeholder="Saisir l'heure…" value="${p.heure}" style="margin-top:6px;padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;width:100%" oninput="setProp(${p.id},'heure',this.value)">`:""}
+          </div>
         </div>
       </div>`;
     c.appendChild(div);
