@@ -329,6 +329,8 @@ function getMN(p){return p.mosque==="Autre"?(p.customMosque||""):(p.mosque||"");
 function getMC(p){return p.mosque&&p.mosque!=="Autre"?(MOSQUES[p.mosque]?.city||""):"";}
 function getCemObj(p){return p.cemeteryKey&&CEMETERIES[p.cemeteryKey]?CEMETERIES[p.cemeteryKey]:null;}function getName(p){return[p.firstName,p.lastName].filter(Boolean).join(" ");}
 function getAgeStr(p){return p.age?`${p.age} ${p.ageUnit}`:"";}
+function getBebePrefix(p){return(!p.bebePrefix||p.bebePrefix==="(aucun)")?"":p.bebePrefix;}
+
 function fallback(p){
   if(isBebe(p)){
     const pref=getBebePrefix(p);
