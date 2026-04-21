@@ -400,7 +400,7 @@ function getRahma(ps){
 }
 
 function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
-  const mP=mName?`, à ${mName}`:"",cP=mCity?`, ${mCity}`:"";
+  const mP=mName?`, à ${mName}`:"";
   const allCem=ps.every(p=>p.cemetery),someCem=ps.some(p=>p.cemetery)&&!allCem;
   // Cemetery string with optional burial hour
   function cemSuffix(pList){
@@ -433,7 +433,7 @@ function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
     const p=ps[0],desc=dSingle(p);
     const rahma=p.gender!=='none'?(p.gender==='f'?"رحمها الله":"رحمه الله"):"";
     const rS=rahma?`, ${rahma}`:"";
-    return[`${LRM}${num}) ${heureStr}${desc}${rS}${mP}${cP}${cemStr}.`];
+    return[`${LRM}${num}) ${heureStr}${desc}${rS}${mP}${cemStr}.`];
   }
 
   const rahma=getRahma(ps),rS=rahma?`, ${rahma}`:"";
@@ -449,7 +449,7 @@ function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
     nameStr=`${ps.length} membres de la oumma dont ${ps.filter(p=>getName(p)).map(dMulti).join(" et ")}`;
   }
 
-  const main=`${LRM}${num}) ${heureStr}${nameStr}${rS}${mP}${cP}${cemStr}.`;
+  const main=`${LRM}${num}) ${heureStr}${nameStr}${rS}${mP}${cemStr}.`;
   const extras=[];
   if(someCem){
     const cemPs=ps.filter(p=>p.cemetery);
