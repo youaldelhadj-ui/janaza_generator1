@@ -108,8 +108,7 @@ body{font-family:'DM Sans',var(--font-sans);direction:ltr}
           <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">🕌 Ajouter une mosquée</div>
           <div class="fields-row" style="flex-wrap:wrap;align-items:flex-end">
             <div class="field f-grow"><label>Nom</label><input type="text" id="nm-name" placeholder="Nom mosquée"></div>
-            <div class="field f-grow"><label>Adresse</label><input type="text" id="nm-addr" placeholder="Rue, ville"></div>
-            <div class="field f-grow"><label>Ville</label><input type="text" id="nm-city" placeholder="Ville"></div>
+            <div class="field f-grow"><label>Adresse (rue, ville)</label><input type="text" id="nm-addr" placeholder="Rue, Ville"></div>
             <div class="field f-grow"><label>Transport</label><input type="text" id="nm-transport" placeholder="Bus / Tram / Métro"></div>
             <button class="abtn" style="padding:9px 16px;flex:0 0 auto;margin-bottom:0" onclick="addCustomMosque()">Ajouter</button>
           </div>
@@ -157,68 +156,71 @@ body{font-family:'DM Sans',var(--font-sans);direction:ltr}
 
 // MOSQUÉES : "Nom": { addr: "Adresse complète", transport: "Infos transport", city: "Ville" }
 const MOSQUES_BASE = {
-  // ── Molenbeek ──────────────────────────────────────────────────────────
-  "Khalil":        { addr: "11 rue Vanderstraeten, Molenbeek",        transport: "Tram 82: Triangle",                                                  city: "Molenbeek" },
-  "Arrahmane":     { addr: "42-44 rue George Moreau, Molenbeek",      transport: "Métro: Comte de Flandre ou Bus 89: G. Moreau",                       city: "Molenbeek" },
-  "Al Aziz":       { addr: "54 rue de l'Escaut, Molenbeek",           transport: "Métro: Comte de Flandre",                                            city: "Molenbeek" },
-  "Badr":          { addr: "108 rue de Ribaucourt, Molenbeek",        transport: "Métro: Ribaucourt",                                                  city: "Molenbeek" },
-  "Arafat":        { addr: "85-87 rue Ulens, Molenbeek",              transport: "Métro: Beekkant ou Tram 82: Ossegem",                                city: "Molenbeek" },
-  // ── Anderlecht ─────────────────────────────────────────────────────────
-  "Amal":          { addr: "11 rue du libre examen, Anderlecht",      transport: "Métro: Aumale",                                                      city: "Anderlecht" },
-  "Ar-Ridha":      { addr: "33 rue Dr De Meersman, Anderlecht",       transport: "Métro: Aumale ou Bus 46: Biestebroeck",                              city: "Anderlecht" },
-  // ── Schaerbeek ─────────────────────────────────────────────────────────
-  "Nour":          { addr: "18 rue Massaux, Schaerbeek",              transport: "Tram 92-93: Sainte Marie ou Bus 59: Geefs ou Bus 61: Limite",        city: "Schaerbeek" },
+  "Abidin":             { addr: "6 rue de la Buanderie, Bruxelles",        transport: "Tram 51-82: Porte d'Anderlecht",                                     city: "Bruxelles" },
   "Abu Hurayra":   { addr: "12A rue Waelhem, Schaerbeek",             transport: "Métro: Botanique ou Bus 65: Waelhem",                                city: "Schaerbeek" },
+  "Ahibba":   { addr: "1102A chaussée de Mons, Anderlecht",             transport: "Métro: La roue ou Bizet",                                city: "Schaerbeek" },
   "Al Ansar":      { addr: "240 rue Verte, Schaerbeek",               transport: "Bus 64: Verte ou Tram 93: Pavillon",                                 city: "Schaerbeek" },
-  // ── Evere ──────────────────────────────────────────────────────────────
-  "Ettaouba":      { addr: "128 rue Edouard Stuckens, Evere",         transport: "Tram 55 ou Bus 45-64: Paix",                                         city: "Evere" },
-  // ── Laeken / NOH ───────────────────────────────────────────────────────
-  "Mouahidine":    { addr: "100 rue de Wautier, Laeken",              transport: "Métro: Bockstael",                                                   city: "Laeken" },
-  "Arrayane":      { addr: "98 rue des Prés Communs, NOH",            transport: "Bus 53: Prés Communs",                                               city: "Neder-Over-Heembeek" },
-  // ── Bruxelles-ville ────────────────────────────────────────────────────
-  "Grande Mosquée":{ addr: "Parc du Cinquantenaire 14, Bruxelles",    transport: "Métro: Mérode ou Schuman",                                           city: "Bruxelles" },
-  "Omar Ibn Al Khattab": { addr: "45 rue de Passchendaele, Bruxelles",transport: "Bus 86: Passchendaele",                                              city: "Bruxelles" },
-  // ── Ixelles / Forest ───────────────────────────────────────────────────
+  "Al Azhar":           { addr: "72 rue Saint-François, Saint-Josse",      transport: "Tram 92-93: Gillon ou Métro: Botanique",                             city: "Saint-Josse" },
+  "Al Aziz":       { addr: "54 rue de l'Escaut, Molenbeek",           transport: "Métro: Comte de Flandre",                                            city: "Molenbeek" },
+  "Al Fath":        { addr: "67 ch. de Wavre, Ixelles",                  transport: "Bus 71: Porte de Namur ou Tram 81: Louise",                          city: "Ixelles" },
+  "Al Islah":       { addr: "45 rue du Trajet, Woluwe-Saint-Lambert",     transport: "Bus 80: Trajet ou Métro: Roodebeek",                               city: "Woluwe-Saint-Lambert" },
+  "Al Jadid":           { addr: "181 boulevard Maurice Lemonnier, Bruxelles", transport: "Tram 3-4-51: Lemonnier",                                          city: "Bruxelles" },
   "Al Karam":      { addr: "52 ch. de Neerstalle, Forest",            transport: "Bus 50: Neerstalle",                                                 city: "Forest" },
-  "El Hikma":      { addr: "34 rue Berthelot, Forest",                transport: "Tram 97: Berthelot",                                                 city: "Forest" },
-  // ── Ganshoren / Koekelberg ─────────────────────────────────────────────
-  "An Nasr":       { addr: "294-296 ch. de Jette, Ganshoren",         transport: "Tram 93: Simonis ou Bus 87: Jette",                                  city: "Ganshoren" },
-  // ── Banlieue ───────────────────────────────────────────────────────────
-  "Nasr Vilvorde": { addr: "89 Mechelsesteenweg, Vilvorde",           transport: "Bus 47: Kerk Vilvoorde ou Bus 58: Heldenplein",                      city: "Vilvorde" },
+  "Al Khayr":       { addr: "34 rue Deschampheleer, Jette",               transport: "Bus 87: Deschampheleer",                                            city: "Jette" },
+  "Al Mohajirine":      { addr: "72 rue Malibran, Ixelles",                transport: "Bus 38-60: Malibran",                                                city: "Ixelles" },
+  "Al Mohsinine":       { addr: "42 rue de Suède, Saint-Gilles",           transport: "Métro: Porte de Hal ou Gare du Midi",                                city: "Saint-Gilles" },
+  "Al Moutaquine":      { addr: "53 chaussée de Merchtem, Molenbeek",      transport: "Métro: Étangs noirs ou Ribaucourt",                                  city: "Molenbeek" },
+  "Al Muslimine":       { addr: "20 rue Ribaucourt, Molenbeek",            transport: "Métro: Ribaucourt ou Comte de Flandre",                              city: "Molenbeek" },
+  "Al Oumma":           { addr: "15 rue Braemt, Saint-Josse",              transport: "Métro: Madou",                                                       city: "Saint-Josse" },
   "Al Youssef":    { addr: "78 Oude Haachtsesteenweg, Diegem",        transport: "Bus 12: Diegem",                                                     city: "Diegem" },
+  "Amal":          { addr: "11 rue du libre examen, Anderlecht",      transport: "Métro: Aumale",                                                      city: "Anderlecht" },
+  "An Nasr":       { addr: "294-296 ch. de Jette, Ganshoren",         transport: "Tram 93: Simonis ou Bus 87: Jette",                                  city: "Ganshoren" },
+  "Annahda":        { addr: "77 rue de Ganshoren, Berchem-Sainte-Agathe", transport: "Bus 87: Ganshoren ou Tram 82: Berchem",                             city: "Berchem-Sainte-Agathe" },
+  "Anwar Chababs":      { addr: "10 rue Potaerdegat, Molenbeek",           transport: "Tram 82: Van Zande",                                                 city: "Molenbeek" },
+  "Ar-Rahman Machelen":{ addr: "15 Woluwelaan, Machelen",                 transport: "Bus 46: Machelen Dorp",                                             city: "Machelen" },
+  "Ar-Ridha":      { addr: "33 rue Dr De Meersman, Anderlecht",       transport: "Métro: Aumale ou Bus 46: Biestebroeck",                              city: "Anderlecht" },
+  "Arafat":        { addr: "85-87 rue Ulens, Molenbeek",              transport: "Métro: Beekkant ou Tram 82: Ossegem",                                city: "Molenbeek" },
+  "Arrahmane":     { addr: "42-44 rue George Moreau, Molenbeek",      transport: "Métro: Comte de Flandre ou Bus 89: G. Moreau",                       city: "Molenbeek" },
+  "Arrayane":      { addr: "98 rue des Prés Communs, NOH",            transport: "Bus 53: Prés Communs",                                               city: "Neder-Over-Heembeek" },
+  "Assalam":            { addr: "81 avenue Fonsny, Saint-Gilles",          transport: "Métro: Gare du Midi",                                                city: "Saint-Gilles" },
+  "Assunna":            { addr: "16 rue Bissé, Anderlecht",                transport: "Métro: Clemenceau",                                                  city: "Anderlecht" },
+  "At-Tawba":       { addr: "21 rue de la Limite, Saint-Josse",           transport: "Bus 65: Limite ou Métro: Madou",                                    city: "Saint-Josse" },
+  "Attadamoune":        { addr: "36 rue des Étangs Noirs, Molenbeek",      transport: "Métro: Étangs noirs",                                                city: "Molenbeek" },
+  "Averroes":           { addr: "251 rue Léon Théodore, Jette",            transport: "Tram 19-51-93 ou Bus 53: Cimetière de Jette",                        city: "Jette" },
+  "Badr":          { addr: "108 rue de Ribaucourt, Molenbeek",        transport: "Métro: Ribaucourt",                                                  city: "Molenbeek" },
+  "Bangladesh":         { addr: "273 chaussée de Wavre, Ixelles",          transport: "Bus 34-80: Museum",                                                  city: "Ixelles" },
+  "Bilal":          { addr: "134 ch. de Louvain, Saint-Josse",            transport: "Bus 29-63: Louvain ou Tram 92-93: Cathédrale",                      city: "Saint-Josse" },
+  "Chatibi":          { addr: "236 rue Léopold 1er, Laeken",            transport: "Métro: Bockstael",                      city: "Saint-Josse" },
+  "Centre Islamique Pakistanais": { addr: "20 rue des Ateliers, Molenbeek", transport: "Métro: Comte de Flandre ou Ribaucourt",                             city: "Molenbeek" },
+  "El Hikma":      { addr: "34 rue Berthelot, Forest",                transport: "Tram 97: Berthelot",                                                 city: "Forest" },
+  "Ettaouba":      { addr: "128 rue Edouard Stuckens, Evere",         transport: "Tram 55 ou Bus 45-64: Paix",                                         city: "Evere" },
+  "Grande Mosquée":{ addr: "Parc du Cinquantenaire 14, Bruxelles",    transport: "Métro: Mérode ou Schuman",                                           city: "Bruxelles" },
+  "Hamza":              { addr: "8 boulevard de Nieuport, Bruxelles",      transport: "Métro: Comte de Flandre",                                            city: "Bruxelles" },
+  "Ibadou Rahman":      { addr: "53 rue du Champ de l'Église, Laeken",     transport: "",                                                                   city: "Laeken" },
+  "Ibn Massaoud":       { addr: "109 rue de Fierlant, Forest",             transport: "Tram 82, Bus 49-50: Orban ou Tram 97: Berthelot",                    city: "Forest" },
+  "Ibrahim":        { addr: "57 rue Becque, Etterbeek",                   transport: "Bus 34: Becque ou Tram 81: Montgomery",                             city: "Etterbeek" },
+  "Imam Malik":         { addr: "65 rue de la Limite, Saint-Josse",        transport: "Tram 92-93: Gillon ou Métro: Botanique",                             city: "Saint-Josse" },
+  "Inaba":              { addr: "29 chaussée de Zellik, Berchem-Sainte-Agathe", transport: "Tram 82: Berchem Shopping ou Bus 87: Parc Monnet",              city: "Berchem-Sainte-Agathe" },
+  "Khalil":        { addr: "11 rue Vanderstraeten, Molenbeek",        transport: "Tram 82: Triangle",                                                  city: "Molenbeek" },
+  "Koubaa":        { addr: "83 rue Vanderlinden, Schaerbeek",        transport: "Tram 55 ou Bus 58: Pavillon",                                                  city: "Molenbeek" },
+  "Markaz":             { addr: "14 parc du Cinquantenaire, Bruxelles",    transport: "Métro: Schuman",                                                     city: "Bruxelles" },
+  "Mouahidine":    { addr: "100 rue de Wautier, Laeken",              transport: "Métro: Bockstael",                                                   city: "Laeken" },
+  "Nasr": { addr: "89 Mechelsesteenweg, Vilvorde",           transport: "Bus 47: Kerk Vilvoorde ou Bus 58: Heldenplein",                      city: "Vilvorde" },
+  "Nour":          { addr: "18 rue Massaux, Schaerbeek",              transport: "Tram 92-93: Sainte Marie ou Bus 59: Geefs ou Bus 61: Limite",        city: "Schaerbeek" },
+  "Omar Ibn Al Khattab": { addr: "45 rue de Passchendaele, Bruxelles",transport: "Bus 86: Passchendaele",                                              city: "Bruxelles" },
+  "Oumma Uccle":    { addr: "12 rue de la Croix, Uccle",                  transport: "Bus 48: Dries ou Tram 97: Fort Jaco",                               city: "Uccle" },
+  "Rahma Jette":    { addr: "144 rue de Meysse, Jette",                   transport: "Bus 53: Meysse ou Tram 93: Miroir",                                 city: "Jette" },
+  "Rajae":              { addr: "54 rue Ter Plast, Laeken",                transport: "Métro: Bockstael",                                                   city: "Laeken" },
+  "Sabilou Rachad": { addr: "183 rue de la Tulipe, Ixelles",              transport: "Tram 81: Trinité ou Bus 71: Trinité",                                   city: "Ixelles" },
+  "Tawhid Grimbergen":{ addr: "4 Verbrande Brug, Grimbergen",             transport: "Bus 250/251: Grimbergen",                                           city: "Grimbergen" },
 };
 
 // CIMETIÈRES MUSULMANS (parcelles islamiques)
 const CEMETERIES_BASE = {
-  "Multiconfessionnel (Evere)": {
-    name: "cimetière multiconfessionnel",
+  "Evere": {
+    name: "cimetière multiconfessionnel d'Evere",
     addr: "4 rue d'Evere, Evere",
     transport: "Bus 69-80: Jules Bordet"
-  },
-  "Vogelenzang (Anderlecht)": {
-    name: "cimetière communal du Vogelenzang",
-    addr: "Avenue du Soldat Britannique 1, Anderlecht",
-    transport: "Bus 46-74: Vogelenzang"
-  },
-  "Jette": {
-    name: "cimetière communal de Jette",
-    addr: "2 avenue Secretin, Jette",
-    transport: "Tram 93: Dieleghem ou Bus 53: Secretin"
-  },
-  "Laeken": {
-    name: "cimetière de Laeken",
-    addr: "2 avenue du Cimetière de Laeken, Laeken",
-    transport: "Bus 53: Cimetière Laeken"
-  },
-  "Etterbeek (Wezembeek)": {
-    name: "cimetière communal d'Etterbeek",
-    addr: "88 rue du Long Chêne, Wezembeek-Oppem",
-    transport: "Bus 36: Wezembeek"
-  },
-  "Forest": {
-    name: "cimetière de Forest",
-    addr: "51 Kleertstraat, Alsemberg",
-    transport: "Bus 54: Cimetière Forest"
   },
 };
 
@@ -264,7 +266,7 @@ function addPerson(){
   const rawHeure=document.getElementById("heure-select").value||"après Dohr";
   const customVal=document.getElementById("heure-custom-global")?.value||"";
   const defaultHeure=rawHeure==="__autre__"?(customVal||"après Dohr"):rawHeure;
-  persons.push({id,firstName:"",lastName:"",age:"",ageUnit:"ans",mosque:"",customMosque:"",customAddr:"",customTransport:"",cemetery:false,cemeteryKey:"",gender:"m",heure:defaultHeure,bebePrefix:"bébé"});
+  persons.push({id,firstName:"",lastName:"",age:"",ageUnit:"ans",mosque:"",customMosque:"",customAddr:"",customTransport:"",cemetery:false,cemeteryKey:"",heureCimetiere:"",gender:"m",heure:defaultHeure,bebePrefix:"bébé"});
   render();liveUpdate();
 }
 function removePerson(id){persons=persons.filter(p=>p.id!==id);render();liveUpdate();}
@@ -299,7 +301,7 @@ function render(){
   const c=document.getElementById("persons-container");c.innerHTML="";
   persons.forEach((p,idx)=>{
     const div=document.createElement("div");div.className="person-card";
-    const mOpts=["", ...getMosqueKeys(), "Autre"].map(m=>`<option value="${m}" ${p.mosque===m?"selected":""}>${m||"— Mosquée —"}</option>`).join("");
+    const mOpts=["", ...getMosqueKeys()].map(m=>`<option value="${m}" ${p.mosque===m?"selected":""}>${m||"— Mosquée —"}</option>`).join("");
     const uOpts=["ans","mois","jours"].map(u=>`<option value="${u}" ${p.ageUnit===u?"selected":""}>${u}</option>`).join("");
     const bb=isBebe(p);
     const HEURES_BASE=["après Dohr","après Asr","après Khotba"];
@@ -319,6 +321,15 @@ function render(){
         </div>
       </div>
       <div class="pcard-body">
+        <!-- 1) Heure -->
+        <div class="fields-row">
+          <div class="field f-grow">
+            <label>Heure de la Janaza</label>
+            <select onchange="setHeureSelect(${p.id},this.value)">${heureOpts}</select>
+            ${isCustomHeure?`<input type="text" placeholder="Saisir l'heure…" value="${p.heure}" style="margin-top:6px;padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;width:100%" oninput="setProp(${p.id},'heure',this.value)">`:""}
+          </div>
+        </div>
+        <!-- 2) Identité -->
         <div class="fields-row">
           <div class="field f-grow"><label>Prénom</label><input type="text" placeholder="Prénom" value="${p.firstName}" oninput="setProp(${p.id},'firstName',this.value)"></div>
           <div class="field f-grow"><label>Nom</label><input type="text" placeholder="Nom" value="${p.lastName}" oninput="setProp(${p.id},'lastName',this.value)"></div>
@@ -326,23 +337,14 @@ function render(){
           <div class="field f-xs"><label>Unité</label><select onchange="setUnit(${p.id},this.value)">${uOpts}</select></div>
           ${bb?`<div class="field f-xs"><label>Préfixe</label><select onchange="setProp(${p.id},'bebePrefix',this.value)">${bebePrefixOpts}</select></div>`:""}
         </div>
+        <!-- 3) Mosquée + Cimetière -->
         <div class="fields-row">
           <div class="field f-grow"><label>Mosquée</label><select onchange="setMosque(${p.id},this.value)">${mOpts}</select></div>
-          ${p.mosque==="Autre"?`
-            <div class="field f-grow"><label>Nom</label><input type="text" placeholder="Nom mosquée" value="${p.customMosque}" oninput="setProp(${p.id},'customMosque',this.value)"></div>
-            <div class="field f-grow"><label>Adresse</label><input type="text" placeholder="Rue, ville" value="${p.customAddr}" oninput="setProp(${p.id},'customAddr',this.value)"></div>
-            <div class="field f-grow"><label>Transport</label><input type="text" placeholder="Bus / Tram" value="${p.customTransport}" oninput="setProp(${p.id},'customTransport',this.value)"></div>`:""}
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:2px">
-            <label class="checkbox-wrap" style="padding-bottom:0"><input type="checkbox" ${p.cemetery?"checked":""} onchange="setCem(${p.id},this.checked)"> + cimetière</label>
-            ${p.cemetery?`<select class="field" style="padding:6px 10px;font-size:13px;flex:1;min-width:160px;border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary)" onchange="setCemKey(${p.id},this.value)">${getCemeteryKeys().map(k=>`<option value="${k}" ${p.cemeteryKey===k?"selected":""}>${k}</option>`).join("")}</select>`:""}
+            <label class="checkbox-wrap" style="padding-bottom:0"><input type="checkbox" ${p.cemetery?"checked":""} onchange="setCem(${p.id},this.checked)"> + cimetière (Evere)</label>
+            ${p.cemetery&&getCemeteryKeys().length>1?`<select class="field" style="padding:6px 10px;font-size:13px;flex:1;min-width:160px;border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary)" onchange="setCemKey(${p.id},this.value)">${getCemeteryKeys().map(k=>`<option value="${k}" ${p.cemeteryKey===k?"selected":""}>${k}</option>`).join("")}</select>`:""}
           </div>
-        </div>
-        <div class="fields-row">
-          <div class="field f-grow">
-            <label>Heure de la Janaza</label>
-            <select onchange="setHeureSelect(${p.id},this.value)">${heureOpts}</select>
-            ${isCustomHeure?`<input type="text" placeholder="Saisir l'heure…" value="${p.heure}" style="margin-top:6px;padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;width:100%" oninput="setProp(${p.id},'heure',this.value)">`:""}
-          </div>
+          ${p.cemetery?`<div class="field" style="flex:0 0 140px"><label>Heure enterrement</label><input type="text" placeholder="ex: 14h00" value="${p.heureCimetiere||""}" oninput="setProp(${p.id},'heureCimetiere',this.value)" style="padding:9px 12px;font-size:14px;font-family:'DM Sans',var(--font-sans);border:1.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;width:100%"></div>`:""}
         </div>
       </div>`;
     c.appendChild(div);
@@ -400,14 +402,38 @@ function getRahma(ps){
 function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
   const mP=mName?`, à ${mName}`:"",cP=mCity?`, ${mCity}`:"";
   const allCem=ps.every(p=>p.cemetery),someCem=ps.some(p=>p.cemetery)&&!allCem;
-  const cemStr=allCem?" + cimetière":"";
-  const heureStr=showHeure?`, ${groupHeure} إن شاء الله`:"";
+  // Cemetery string with optional burial hour
+  function cemSuffix(pList){
+    const cemPs=pList.filter(p=>p.cemetery);
+    const count=cemPs.length;
+    const nbWords=["","","pour les deux","pour les trois","pour les quatre","pour les cinq","pour les six"];
+    const uniqueHours=[...new Set(cemPs.map(p=>p.heureCimetiere||"").filter(h=>h))];
+    if(count===1){
+      return` + cimetière${cemPs[0].heureCimetiere?` à ${cemPs[0].heureCimetiere}`:""}`;
+    }
+    if(uniqueHours.length===0){
+      const pourStr=count<nbWords.length?` ${nbWords[count]}`:"";
+      return` + cimetière${pourStr}`;
+    }
+    if(uniqueHours.length===1){
+      const pourStr=count<nbWords.length?` ${nbWords[count]}`:"";
+      return` + cimetière à ${uniqueHours[0]}${pourStr}`;
+    }
+    // Heures différentes → "cimetière à 14h pour X et à 16h pour Y"
+    const parts=cemPs.map(p=>{
+      const name=getName(p)||fallback(p);
+      return p.heureCimetiere?`à ${p.heureCimetiere} pour ${name}`:`pour ${name}`;
+    });
+    return` + cimetière ${parts.join(" et ")}`;
+  }
+  const cemStr=allCem?cemSuffix(ps):"";
+  const heureStr=groupHeure?`${groupHeure}, `:"";
 
   if(ps.length===1){
     const p=ps[0],desc=dSingle(p);
     const rahma=p.gender!=='none'?(p.gender==='f'?"رحمها الله":"رحمه الله"):"";
     const rS=rahma?`, ${rahma}`:"";
-    return[`${LRM}${num}) ${desc}${rS}${mP}${cP}${heureStr}${cemStr}.`];
+    return[`${LRM}${num}) ${heureStr}${desc}${rS}${mP}${cP}${cemStr}.`];
   }
 
   const rahma=getRahma(ps),rS=rahma?`, ${rahma}`:"";
@@ -423,11 +449,30 @@ function buildGroupLines(num,ps,mName,mCity,groupHeure,showHeure){
     nameStr=`${ps.length} membres de la oumma dont ${ps.filter(p=>getName(p)).map(dMulti).join(" et ")}`;
   }
 
-  const main=`${LRM}${num}) ${nameStr}${rS}${mP}${cP}${heureStr}${cemStr}.`;
+  const main=`${LRM}${num}) ${heureStr}${nameStr}${rS}${mP}${cP}${cemStr}.`;
   const extras=[];
   if(someCem){
-    const ns=ps.filter(p=>p.cemetery).map(p=>getName(p)||fallback(p));
-    extras.push(`${LRM}+ cimetière pour ${ns.join(" et ")}.`);
+    const cemPs=ps.filter(p=>p.cemetery);
+    const count=cemPs.length;
+    const nbWords2=["","","pour les deux","pour les trois","pour les quatre","pour les cinq","pour les six"];
+    const uniqueHours2=[...new Set(cemPs.map(p=>p.heureCimetiere||"").filter(h=>h))];
+    let cemLine;
+    if(uniqueHours2.length===0){
+      const pourStr=count>1&&count<nbWords2.length?` ${nbWords2[count]}`:"";
+      const nsStr=cemPs.map(p=>getName(p)||fallback(p)).join(" et ");
+      cemLine=`+ cimetière${pourStr||` pour ${nsStr}`}`;
+    } else if(uniqueHours2.length===1){
+      const pourStr=count>1&&count<nbWords2.length?` ${nbWords2[count]}`:"";
+      const nsStr=cemPs.map(p=>getName(p)||fallback(p)).join(" et ");
+      cemLine=`+ cimetière à ${uniqueHours2[0]}${pourStr||` pour ${nsStr}`}`;
+    } else {
+      const parts=cemPs.map(p=>{
+        const name=getName(p)||fallback(p);
+        return p.heureCimetiere?`à ${p.heureCimetiere} pour ${name}`:`pour ${name}`;
+      });
+      cemLine=`+ cimetière ${parts.join(" et ")}`;
+    }
+    extras.push(`${LRM}${cemLine}.`);
   }
   return[main,...extras];
 }
@@ -451,27 +496,19 @@ function buildMessage(){
   const groups=groupPersons();
   const nb=groups.length;
 
-  // Determine if all groups share the same heure
-  const allHeures=groups.map(ps=>ps[0].heure||globalHeure);
-  const allSameHeure=allHeures.every(h=>h===allHeures[0]);
-  const introHeure=allSameHeure?allHeures[0]:null;
-
   const lines=[];
   lines.push(`${LRM}Salam alaykum wa rahmatullahi wa barakatu,`);
   lines.push(`${RLM}السلام عليكم  و رحمة الله و بركاته`);
-  lines.push(`${LRM}C'est à Allah que nous appartenons et c'est à Lui que nous retournons» (S2, V156)`);
+  lines.push(`${LRM}C'est à Allah que nous appartenons et c'est à Lui que nous retournons (S2, V156)`);
   lines.push(`${RLM}إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ`);
-  if(introHeure){
-    lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr}, ${introHeure} إن شاء الله:`);
-  } else {
-    lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr} إن شاء الله:`);
-  }
+  lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr} إن شاء الله:`);
   lines.push("");
   const mosquesUsed=[];
   groups.forEach((ps,idx)=>{
     const mN=getMN(ps[0]),mC=getMC(ps[0]);
     const groupHeure=ps[0].heure||globalHeure;
-    lines.push(...buildGroupLines(idx+1,ps,mN,mC,groupHeure,!allSameHeure));
+    if(idx>0)lines.push(""); // blank line between entries
+    lines.push(...buildGroupLines(idx+1,ps,mN,mC,groupHeure,true));
     if(mN&&!mosquesUsed.find(m=>m.key===mN))mosquesUsed.push({key:mN,person:ps[0]});
   });
   lines.push("");
@@ -479,8 +516,7 @@ function buildMessage(){
   lines.push(`${LRM}Chaque âme goûtera la mort (S3, V185)`);
   lines.push("");
   mosquesUsed.forEach(({key,person:p})=>{
-    if(p.mosque==="Autre"){if(p.customMosque){lines.push(`${LRM}🕌 ${p.customMosque}, ${p.customAddr}.`);if(p.customTransport)lines.push(`${LRM}(${p.customTransport})`);}}
-    else if(MOSQUES[p.mosque]){const m=MOSQUES[p.mosque];lines.push(`${LRM}🕌 ${p.mosque}, ${m.addr}.`);lines.push(`${LRM}(${m.transport})`);}
+    if(MOSQUES[p.mosque]){const m=MOSQUES[p.mosque];lines.push(`${LRM}🕌 ${p.mosque}, ${m.addr}.`);lines.push(`${LRM}(${m.transport})`);}
   });
   // Cimetières utilisés (dédupliqués)
   const cemUsed=[];
@@ -490,8 +526,12 @@ function buildMessage(){
   });
   cemUsed.forEach(key=>{
     const c=CEMETERIES[key];
-    if(c){lines.push(`${LRM}⚰️ ${c.name}, ${c.addr}.`);lines.push(`${LRM}(${c.transport})`);}
-  });  if(WA_LINKS.length){lines.push("");WA_LINKS.forEach(l=>lines.push(`${LRM}${l}`));}
+    if(c){
+      lines.push(`${LRM}⚰️ ${c.name}, ${c.addr}.`);
+      lines.push(`${LRM}(${c.transport})`);
+    }
+  });
+  if(WA_LINKS.length){lines.push("");WA_LINKS.forEach(l=>lines.push(`${LRM}${l}`));}
   return lines;
 }
 
@@ -509,53 +549,7 @@ function isPureAr(line){
 function isLink(line){return line.replace(/[\u200E\u200F]/g,"").trim().startsWith("http");}
 
 function generateCanvas(){
-  const lines=buildMessage();
-  const font=`${CFS}px 'Segoe UI',Arial,Helvetica,sans-serif`;
-  const fontAr=`${CFS+1}px 'Segoe UI',Arial,Helvetica,sans-serif`;
-  const tmp=document.createElement('canvas').getContext('2d');
-  tmp.font=font;
-  const maxW=CW-CP*2;
-
-  function wrap(text,isAr){
-    if(!text)return[{t:"",ar:false}];
-    if(isAr||tmp.measureText(text).width<=maxW)return[{t:text,ar:isAr}];
-    const ws=text.split(" ");const res=[];let cur="";
-    ws.forEach(w=>{const test=cur?cur+" "+w:w;if(tmp.measureText(test).width<=maxW)cur=test;else{if(cur)res.push(cur);cur=w;}});
-    if(cur)res.push(cur);
-    return res.map(t=>({t,ar:false}));
-  }
-
-  const dLines=[];
-  lines.forEach(line=>{
-    const clean=line.replace(/[\u200E\u200F]/g,"");
-    if(!clean){dLines.push({t:"",empty:true});return;}
-    const ar=isPureAr(line),lk=isLink(line);
-    wrap(clean,ar).forEach(d=>dLines.push({...d,link:lk}));
-  });
-
-  const headerH=40,totalH=headerH+CP*2+dLines.length*CLH;
-  const canvas=document.createElement('canvas');
-  canvas.width=CW;canvas.height=Math.max(totalH,100);
-  const ctx=canvas.getContext('2d');
-
-  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,canvas.height);
-  ctx.fillStyle='#1D9E75';ctx.fillRect(0,0,CW,headerH);
-  ctx.fillStyle='#E1F5EE';ctx.font=`500 12px 'Segoe UI',Arial,sans-serif`;
-  ctx.direction='ltr';ctx.textAlign='left';ctx.fillText('Annonce Janaza',CP,25);
-  ctx.fillStyle='#9FE1CB';ctx.fillText(` — ${groupPersons().length} Janaza`,CP+130,25);
-
-  let y=headerH+CP+CFS;
-  dLines.forEach(({t,ar,empty,link})=>{
-    if(empty){y+=CLH*0.5;return;}
-    ctx.fillStyle=ar?'#555555':link?'#1D9E75':'#1a1a1a';
-    ctx.font=ar?fontAr:font;
-    ctx.direction=ar?'rtl':'ltr';
-    ctx.textAlign=ar?'right':'left';
-    ctx.fillText(t,ar?CW-CP:CP,y);
-    y+=CLH;
-  });
-
-  return canvas;
+  return _buildCanvas(buildMessage());
 }
 
 function liveUpdate(){
@@ -564,7 +558,10 @@ function liveUpdate(){
 }
 
 function copyText(){
-  navigator.clipboard.writeText(buildMessage().join("\n")).then(()=>{
+  const lines=buildMessage();
+  // Join lines: empty string lines become actual blank lines (double newline)
+  const text=lines.map(l=>l.replace(/[\u200E\u200F]/g,"")).join("\n");
+  navigator.clipboard.writeText(text).then(()=>{
     const b=document.getElementById("copy-text-btn");b.textContent="Copié !";
     setTimeout(()=>b.textContent="Copier texte",2000);
   });
@@ -576,12 +573,82 @@ function downloadImage(){
   a.href=generateCanvas().toDataURL('image/png');a.click();
 }
 
+function generateCanvasNoLinks(){
+  // Build message lines but exclude WA_LINKS section
+  const allLines=buildMessage();
+  // Find where WA_LINKS start (after last empty line before links)
+  let cutIdx=allLines.length;
+  if(WA_LINKS.length){
+    // Find last "" before the WA_LINKS block
+    for(let i=allLines.length-1;i>=0;i--){
+      const clean=allLines[i].replace(/[\u200E\u200F]/g,"").trim();
+      if(clean===""&&i<allLines.length-1){cutIdx=i;break;}
+    }
+  }
+  const lines=allLines.slice(0,cutIdx);
+  return _buildCanvas(lines);
+}
+
+function _buildCanvas(lines){
+  const font=`${CFS}px 'Segoe UI',Arial,Helvetica,sans-serif`;
+  const fontAr=`${CFS+1}px 'Segoe UI',Arial,Helvetica,sans-serif`;
+  const tmp=document.createElement('canvas').getContext('2d');
+  tmp.font=font;
+  const maxW=CW-CP*2;
+  function wrap(text,isAr){
+    if(!text)return[{t:"",ar:false}];
+    if(isAr||tmp.measureText(text).width<=maxW)return[{t:text,ar:isAr}];
+    const ws=text.split(" ");const res=[];let cur="";
+    ws.forEach(w=>{const test=cur?cur+" "+w:w;if(tmp.measureText(test).width<=maxW)cur=test;else{if(cur)res.push(cur);cur=w;}});
+    if(cur)res.push(cur);
+    return res.map(t=>({t,ar:false}));
+  }
+  const dLines=[];
+  lines.forEach(line=>{
+    const clean=line.replace(/[\u200E\u200F]/g,"");
+    if(!clean){dLines.push({t:"",empty:true});return;}
+    const ar=isPureAr(line),lk=isLink(line);
+    wrap(clean,ar).forEach(d=>dLines.push({...d,link:lk}));
+  });
+  const headerH=40,totalH=headerH+CP*2+dLines.length*CLH;
+  const canvas=document.createElement('canvas');
+  canvas.width=CW;canvas.height=Math.max(totalH,100);
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,canvas.height);
+  ctx.fillStyle='#1D9E75';ctx.fillRect(0,0,CW,headerH);
+  ctx.fillStyle='#E1F5EE';ctx.font=`500 12px 'Segoe UI',Arial,sans-serif`;
+  ctx.direction='ltr';ctx.textAlign='left';ctx.fillText('Annonce Janaza',CP,25);
+  ctx.fillStyle='#9FE1CB';ctx.fillText(` — ${groupPersons().length} Janaza`,CP+130,25);
+  let y=headerH+CP+CFS;
+  dLines.forEach(({t,ar,empty,link})=>{
+    if(empty){y+=CLH*0.5;return;}
+    ctx.fillStyle=ar?'#555555':link?'#1D9E75':'#1a1a1a';
+    ctx.font=ar?fontAr:font;
+    ctx.direction=ar?'rtl':'ltr';
+    ctx.textAlign=ar?'right':'left';
+    ctx.fillText(t,ar?CW-CP:CP,y);
+    y+=CLH;
+  });
+  return canvas;
+}
+
 function copyImage(){
-  generateCanvas().toBlob(async blob=>{
+  // Copy image without links
+  generateCanvasNoLinks().toBlob(async blob=>{
     try{
-      await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
-      const b=document.getElementById("copy-img-btn");b.textContent="Image copiée !";
-      setTimeout(()=>b.textContent="Copier image",2000);
+      // Also build text of links to copy alongside
+      const allLines=buildMessage();
+      const linksText=WA_LINKS.length?("\n\n"+WA_LINKS.map(l=>l.replace(/[\u200E\u200F]/g,"")).join("\n")):"";
+      const items={'image/png':blob};
+      await navigator.clipboard.write([new ClipboardItem(items)]);
+      // Now also copy the links as text to clipboard after a tiny delay
+      // We can't write both image+text at once, so we append links to the copy-text button notification
+      const b=document.getElementById("copy-img-btn");
+      b.textContent="Image copiée !";
+      if(linksText){
+        b.title="Les liens WA ont été ajoutés en bas du texte. Utilisez 'Copier texte' pour les avoir.";
+      }
+      setTimeout(()=>{b.textContent="Copier image";b.title="";},2000);
     }catch(e){alert("Non supporté sur cet appareil — utilisez 'Télécharger' puis envoyez l'image.");}
   });
 }
@@ -613,14 +680,15 @@ function renderCustomLists(){
 function addCustomMosque(){
   const name=document.getElementById("nm-name").value.trim();
   const addr=document.getElementById("nm-addr").value.trim();
-  const city=document.getElementById("nm-city").value.trim();
   const transport=document.getElementById("nm-transport").value.trim();
   if(!name){alert("Le nom de la mosquée est requis.");return;}
   if(MOSQUES[name]){alert(`"${name}" existe déjà.`);return;}
+  // Extract city from last part of address if comma present
+  const addrParts=addr.split(",");
+  const city=addrParts.length>1?addrParts[addrParts.length-1].trim():"";
   MOSQUES[name]={addr,city,transport};
   document.getElementById("nm-name").value="";
   document.getElementById("nm-addr").value="";
-  document.getElementById("nm-city").value="";
   document.getElementById("nm-transport").value="";
   renderCustomLists();
   render();
