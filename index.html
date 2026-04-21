@@ -498,9 +498,13 @@ function buildMessage(){
 
   const lines=[];
   lines.push(`${LRM}Salam alaykum wa rahmatullahi wa barakatu,`);
+  lines.push("");
   lines.push(`${RLM}السلام عليكم  و رحمة الله و بركاته`);
+  lines.push("");
   lines.push(`${LRM}C'est à Allah que nous appartenons et c'est à Lui que nous retournons (S2, V156)`);
+  lines.push("");
   lines.push(`${RLM}إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ`);
+  lines.push("");
   lines.push(`${LRM}${nb} Salat Al Janaza, aujourd'hui, ${dateStr} إن شاء الله:`);
   lines.push("");
   const mosquesUsed=[];
@@ -515,8 +519,8 @@ function buildMessage(){
   lines.push(`${RLM}كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ`);
   lines.push(`${LRM}Chaque âme goûtera la mort (S3, V185)`);
   lines.push("");
-  mosquesUsed.forEach(({key,person:p})=>{
-    if(MOSQUES[p.mosque]){const m=MOSQUES[p.mosque];lines.push(`${LRM}🕌 ${p.mosque}, ${m.addr}.`);lines.push(`${LRM}(${m.transport})`);}
+  mosquesUsed.forEach(({key,person:p},idx)=>{
+    if(MOSQUES[p.mosque]){const m=MOSQUES[p.mosque];if(idx>0)lines.push("");lines.push(`${LRM}🕌 ${p.mosque}, ${m.addr}.`);lines.push(`${LRM}(${m.transport})`);}
   });
   // Cimetières utilisés (dédupliqués)
   const cemUsed=[];
@@ -527,6 +531,7 @@ function buildMessage(){
   cemUsed.forEach(key=>{
     const c=CEMETERIES[key];
     if(c){
+      lines.push("");
       lines.push(`${LRM}⚰️ ${c.name}, ${c.addr}.`);
       lines.push(`${LRM}(${c.transport})`);
     }
